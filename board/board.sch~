@@ -37,7 +37,7 @@ refdes=CONN1
 T 42600 49050 5 10 0 0 0 0 1
 device=CONNECTOR_14
 T 42600 49250 5 10 0 0 0 0 1
-footprint=SIP14N
+footprint=JUMPER14
 }
 C 46300 49000 1 180 0 connector14-2.sym
 {
@@ -46,7 +46,7 @@ refdes=CONN3
 T 46000 42950 5 10 0 0 180 0 1
 device=CONNECTOR_14
 T 46000 42750 5 10 0 0 180 0 1
-footprint=SIP14N
+footprint=JUMPER14
 }
 C 45500 42000 1 90 0 connector5-2.sym
 {
@@ -55,7 +55,7 @@ refdes=CONN2
 T 43050 42300 5 10 0 0 90 0 1
 device=CONNECTOR_5
 T 42850 42300 5 10 0 0 90 0 1
-footprint=SIP5N
+footprint=JUMPER5
 }
 T 46200 47500 9 10 1 0 0 0 1
 13
