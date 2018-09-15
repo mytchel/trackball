@@ -159,7 +159,7 @@ refdes=S1
 T 48000 47800 5 10 0 0 0 0 1
 device=SWITCH_PUSHBUTTON_NO
 T 47600 47200 5 10 1 0 0 0 1
-footprint=Cherry_PCBmount_NoDiodeNoLED
+footprint=CherryMX_PCBmount_NoDiodeNoLED
 }
 C 47600 46500 1 0 0 switch-pushbutton-no-1.sym
 {
@@ -168,7 +168,7 @@ refdes=S2
 T 48000 47100 5 10 0 0 0 0 1
 device=SWITCH_PUSHBUTTON_NO
 T 47600 46500 5 10 1 0 0 0 1
-footprint=Cherry_PCBmount_NoDiodeNoLED
+footprint=CherryMX_PCBmount_NoDiodeNoLED
 }
 C 47600 45800 1 0 0 switch-pushbutton-no-1.sym
 {
@@ -177,7 +177,7 @@ refdes=S3
 T 48000 46400 5 10 0 0 0 0 1
 device=SWITCH_PUSHBUTTON_NO
 T 47600 45800 5 10 1 0 0 0 1
-footprint=Cherry_PCBmount_NoDiodeNoLED
+footprint=CherryMX_PCBmount_NoDiodeNoLED
 }
 C 47600 45100 1 0 0 switch-pushbutton-no-1.sym
 {
@@ -186,7 +186,7 @@ refdes=S4
 T 48000 45700 5 10 0 0 0 0 1
 device=SWITCH_PUSHBUTTON_NO
 T 47600 45100 5 10 1 0 0 0 1
-footprint=Cherry_PCBmount_NoDiodeNoLED
+footprint=CherryMX_PCBmount_NoDiodeNoLED
 }
 N 46300 45400 47600 45400 4
 N 47600 45400 47600 45100 4

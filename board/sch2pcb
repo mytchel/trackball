@@ -1,0 +1,4 @@
+#!/bin/sh
+
+gsch2pcb --elements-dir ./fp $@
+
