@@ -1,0 +1,102 @@
+v 20130925 2
+B 300 0 2100 3300 3 0 0 0 -1 -1 0 -1 -1 -1 -1 -1
+P 2700 2300 2400 2300 1 0 0
+{
+T 3300 2300 5 10 0 0 0 0 1
+pintype=out
+T 2345 2295 5 10 1 1 0 6 1
+pinlabel=XY_LED
+T 2495 2345 5 10 1 1 0 0 1
+pinnumber=2
+T 3300 2300 5 10 0 0 0 0 1
+pinseq=2
+}
+P 0 300 300 300 1 0 0
+{
+T -600 300 5 10 0 0 0 0 1
+pintype=in
+T 355 295 5 10 1 1 0 0 1
+pinlabel=NCS
+T 205 345 5 10 1 1 0 6 1
+pinnumber=4
+T -600 300 5 10 0 0 0 0 1
+pinseq=4
+}
+P 0 600 300 600 1 0 0
+{
+T -600 600 5 10 0 0 0 0 1
+pintype=in
+T 355 595 5 10 1 1 0 0 1
+pinlabel=MOSI
+T 205 645 5 10 1 1 0 6 1
+pinnumber=8
+T -600 600 5 10 0 0 0 0 1
+pinseq=8
+}
+P 0 900 300 900 1 0 0
+{
+T -600 900 5 10 0 0 0 0 1
+pintype=in
+T 355 895 5 10 1 1 0 0 1
+pinlabel=NRESET
+T 205 945 5 10 1 1 0 6 1
+pinnumber=3
+T -600 900 5 10 0 0 0 0 1
+pinseq=3
+}
+P 0 1200 300 1200 1 0 0
+{
+T -600 1200 5 10 0 0 0 0 1
+pintype=clk
+T 355 1195 5 10 1 1 0 0 1
+pinlabel=SCLK
+T 205 1245 5 10 1 1 0 6 1
+pinnumber=5
+T -600 1200 5 10 0 0 0 0 1
+pinseq=5
+}
+P 0 1500 300 1500 1 0 0
+{
+T -600 1500 5 10 0 0 0 0 1
+pintype=out
+T 355 1495 5 10 1 1 0 0 1
+pinlabel=MISO
+T 205 1545 5 10 1 1 0 6 1
+pinnumber=1
+T -600 1500 5 10 0 0 0 0 1
+pinseq=1
+}
+T 595 -600 8 10 1 1 0 0 1
+device=ADNS-5030
+T 3495 5600 8 10 0 1 0 0 1
+description=Optical Mouse Sensor
+T 1295 2900 8 10 1 1 0 0 1
+refdes=U?
+T -705 0 8 10 1 1 0 0 1
+numslots=1
+T -705 0 8 10 1 1 0 0 1
+footprint=ZIP8
+T 900 2600 9 10 1 0 0 0 1
+ADNS-5030
+P 0 2300 300 2300 1 0 0
+{
+T 0 2300 5 10 0 0 0 0 1
+pintype=gnd
+T 355 2295 5 10 1 1 0 0 1
+pinlabel=GND
+T 205 2345 5 10 1 1 0 6 1
+pinnumber=6
+T 0 2300 5 10 0 0 0 0 1
+pinseq=6
+}
+P 600 3600 600 3300 1 0 0
+{
+T 600 3600 5 10 0 0 0 0 1
+pintype=pwr
+T 600 3245 5 10 1 1 90 6 1
+pinlabel=V_DD
+T 550 3395 5 10 1 1 90 0 1
+pinnumber=7
+T 600 3600 5 10 0 0 0 0 1
+pinseq=7
+}

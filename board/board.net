@@ -1,0 +1,12 @@
+unnamed_net10	S1-1 CONN3-9 
+unnamed_net9	S2-1 CONN3-8 
+unnamed_net8	S3-1 CONN3-7 
+unnamed_net7	S4-1 CONN3-6 
+unnamed_net6	CONN3-2 
+unnamed_net5	CONN3-1 
+GND	S4-2 S3-2 S2-2 S1-2 CONN2-2 CONN3-13 CONN1-14 
+unnamed_net4	CONN1-13 
+unnamed_net3	CONN1-12 
+unnamed_net2	CONN1-11 
+Vcc	CONN1-2 R1-2 
+unnamed_net1	R1-1 D1-2 

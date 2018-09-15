@@ -1,18 +1,19 @@
-CLOCK = 16000000
+CLOCK = 8000000
 
 CFLAGS = -Wall -O0 \
-	-mmcu=atmega328p -DF_CPU=$(CLOCK) \
-	-Iusbdrv -I.
+	-mmcu=atmega32u4 -DF_CPU=$(CLOCK) \
+	-I.
 
-LDFLAGS = -mmcu=atmega328p
+LDFLAGS = -mmcu=atmega32u4
 
-AVRDUDE = avrdude -c usbtiny -p m328p -F
+AVRDUDE = avrdude -P /dev/cuaU0 -c avr109 -p m32u4
 CC = avr-gcc
 OBJCOPY = avr-objcopy
 OBJDUMP = avr-objdump
 
 SRC_C = main.c \
-				uart.c
+				spi.c \
+				usb_mouse.c
 
 OBJ = $(SRC_A:%.S=%.o) $(SRC_C:%.c=%.o)
 
