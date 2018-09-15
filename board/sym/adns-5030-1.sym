@@ -72,31 +72,13 @@ T 3495 5600 8 10 0 1 0 0 1
 description=Optical Mouse Sensor
 T 1295 2900 8 10 1 1 0 0 1
 refdes=U?
-T -705 0 8 10 1 1 0 0 1
-numslots=1
-T -705 0 8 10 1 1 0 0 1
-footprint=ZIP8
 T 900 2600 9 10 1 0 0 0 1
 ADNS-5030
-P 0 2300 300 2300 1 0 0
-{
-T 0 2300 5 10 0 0 0 0 1
-pintype=gnd
-T 355 2295 5 10 1 1 0 0 1
-pinlabel=GND
-T 205 2345 5 10 1 1 0 6 1
-pinnumber=6
-T 0 2300 5 10 0 0 0 0 1
-pinseq=6
-}
-P 600 3600 600 3300 1 0 0
-{
-T 600 3600 5 10 0 0 0 0 1
-pintype=pwr
-T 600 3245 5 10 1 1 90 6 1
-pinlabel=V_DD
-T 550 3395 5 10 1 1 90 0 1
-pinnumber=7
-T 600 3600 5 10 0 0 0 0 1
-pinseq=7
-}
+T -700 -602 8 10 1 1 0 0 1
+footprint=ZIP9
+T -695 -604 8 10 1 1 0 0 1
+numslots=1
+N 800 3300 800 3600 4
+N 300 2700 100 2700 4
+C 0 2400 1 0 0 gnd-2.sym
+C 600 3600 1 0 0 3.3V-plus-1.sym

@@ -1,5 +1,15 @@
 # Pin name action command file
 
+# Start of element U1
+ChangePinName(U1, unknown, unknown)
+ChangePinName(U1, unknown, unknown)
+ChangePinName(U1, 2, XY_LED)
+ChangePinName(U1, 1, MISO)
+ChangePinName(U1, 5, SCLK)
+ChangePinName(U1, 3, NRESET)
+ChangePinName(U1, 8, MOSI)
+ChangePinName(U1, 4, NCS)
+
 # Start of element S4
 ChangePinName(S4, 2, 2)
 ChangePinName(S4, 1, 1)
@@ -17,27 +27,20 @@ ChangePinName(S1, 2, 2)
 ChangePinName(S1, 1, 1)
 
 # Start of element CONN2
+ChangePinName(CONN2, 14, 14)
+ChangePinName(CONN2, 13, 13)
+ChangePinName(CONN2, 12, 12)
+ChangePinName(CONN2, 11, 11)
+ChangePinName(CONN2, 10, 10)
+ChangePinName(CONN2, 9, 9)
+ChangePinName(CONN2, 8, 8)
+ChangePinName(CONN2, 7, 7)
+ChangePinName(CONN2, 6, 6)
 ChangePinName(CONN2, 5, 5)
 ChangePinName(CONN2, 4, 4)
 ChangePinName(CONN2, 3, 3)
 ChangePinName(CONN2, 2, 2)
 ChangePinName(CONN2, 1, 1)
-
-# Start of element CONN3
-ChangePinName(CONN3, 14, 14)
-ChangePinName(CONN3, 13, 13)
-ChangePinName(CONN3, 12, 12)
-ChangePinName(CONN3, 11, 11)
-ChangePinName(CONN3, 10, 10)
-ChangePinName(CONN3, 9, 9)
-ChangePinName(CONN3, 8, 8)
-ChangePinName(CONN3, 7, 7)
-ChangePinName(CONN3, 6, 6)
-ChangePinName(CONN3, 5, 5)
-ChangePinName(CONN3, 4, 4)
-ChangePinName(CONN3, 3, 3)
-ChangePinName(CONN3, 2, 2)
-ChangePinName(CONN3, 1, 1)
 
 # Start of element CONN1
 ChangePinName(CONN1, 14, 14)

@@ -1,15 +1,13 @@
-v 20091004 2
+v 20130925 2
 C 40000 40000 0 0 0 title-B.sym
 C 50600 43700 1 0 0 adns-5030-1.sym
 {
 T 51195 43100 5 10 1 1 0 0 1
 device=ADNS-5030
 T 51895 46600 5 10 1 1 0 0 1
-refdes=U2
+refdes=U1
 T 49895 43700 5 10 1 1 0 0 1
 numslots=1
-T 49895 43700 5 10 1 1 0 0 1
-footprint=ZIP9
 }
 C 53300 45800 1 0 0 led-3.sym
 {
@@ -158,6 +156,8 @@ T 48000 47500 5 10 1 1 0 0 1
 refdes=S1
 T 48000 47800 5 10 0 0 0 0 1
 device=SWITCH_PUSHBUTTON_NO
+T 47600 47200 5 10 1 0 0 0 1
+footprint=CherryMX_PCBmount_NoDiodeNoLED
 }
 C 47600 46500 1 0 0 switch-pushbutton-no-1.sym
 {
@@ -165,6 +165,8 @@ T 48000 46800 5 10 1 1 0 0 1
 refdes=S2
 T 48000 47100 5 10 0 0 0 0 1
 device=SWITCH_PUSHBUTTON_NO
+T 47600 46500 5 10 1 0 0 0 1
+footprint=CherryMX_PCBmount_NoDiodeNoLED
 }
 C 47600 45800 1 0 0 switch-pushbutton-no-1.sym
 {
@@ -172,6 +174,8 @@ T 48000 46100 5 10 1 1 0 0 1
 refdes=S3
 T 48000 46400 5 10 0 0 0 0 1
 device=SWITCH_PUSHBUTTON_NO
+T 47600 45800 5 10 1 0 0 0 1
+footprint=CherryMX_PCBmount_NoDiodeNoLED
 }
 C 47600 45100 1 0 0 switch-pushbutton-no-1.sym
 {
@@ -179,6 +183,8 @@ T 48000 45400 5 10 1 1 0 0 1
 refdes=S4
 T 48000 45700 5 10 0 0 0 0 1
 device=SWITCH_PUSHBUTTON_NO
+T 47600 45100 5 10 1 0 0 0 1
+footprint=CherryMX_PCBmount_NoDiodeNoLED
 }
 N 46300 45400 47600 45400 4
 N 47600 45400 47600 45100 4
@@ -191,3 +197,23 @@ C 48500 46900 1 0 0 gnd-1.sym
 C 48500 46200 1 0 0 gnd-1.sym
 C 48500 45500 1 0 0 gnd-1.sym
 C 48500 44800 1 0 0 gnd-1.sym
+C 53400 42100 1 0 0 adns-5030-1.sym
+{
+T 53995 41500 5 10 1 1 0 0 1
+device=ADNS-5030
+T 54695 45000 5 10 1 1 0 0 1
+refdes=U2
+T 52695 42100 5 10 1 1 0 0 1
+numslots=1
+T 52700 41498 5 10 1 1 0 0 1
+footprint=ZIP9
+}
+C 47100 47500 1 0 0 adns-5030-2.sym
+{
+T 50600 50500 5 10 1 1 0 6 1
+refdes=U?
+T 48600 50650 5 10 0 0 0 0 1
+device=ADNS-5030
+T 48600 50850 5 10 0 0 0 0 1
+footprint=ZIP9
+}
