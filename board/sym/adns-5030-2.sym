@@ -4,7 +4,7 @@ refdes=U?
 T 600 2750 5 10 0 0 0 0 1
 device=ADNS-5030
 T 600 2950 5 10 0 0 0 0 1
-footprint=ZIP9
+footprint=adns-5030-2
 T 600 3150 5 10 0 0 0 0 1
 net=GND:6
 T 600 3350 5 10 0 0 0 0 1

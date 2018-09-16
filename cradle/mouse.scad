@@ -80,7 +80,8 @@ difference() {
     }
 }
 
-if (false) {
+if (true
+    ) {
     translate([0, 0, 28.25]) {
         sphere(d = 52.5);
 
