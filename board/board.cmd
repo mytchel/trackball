@@ -1,5 +1,15 @@
 # Pin name action command file
 
+# Start of element CONNB
+ChangePinName(CONNB, 8, 8)
+ChangePinName(CONNB, 7, 7)
+ChangePinName(CONNB, 6, 6)
+ChangePinName(CONNB, 5, 5)
+ChangePinName(CONNB, 4, 4)
+ChangePinName(CONNB, 3, 3)
+ChangePinName(CONNB, 2, 2)
+ChangePinName(CONNB, 1, 1)
+
 # Start of element U1
 ChangePinName(U1, unknown, unknown)
 ChangePinName(U1, unknown, unknown)
@@ -9,22 +19,6 @@ ChangePinName(U1, 5, SCLK)
 ChangePinName(U1, 3, NRESET)
 ChangePinName(U1, 8, MOSI)
 ChangePinName(U1, 4, NCS)
-
-# Start of element S4
-ChangePinName(S4, 2, 2)
-ChangePinName(S4, 1, 1)
-
-# Start of element S3
-ChangePinName(S3, 2, 2)
-ChangePinName(S3, 1, 1)
-
-# Start of element S2
-ChangePinName(S2, 2, 2)
-ChangePinName(S2, 1, 1)
-
-# Start of element S1
-ChangePinName(S1, 2, 2)
-ChangePinName(S1, 1, 1)
 
 # Start of element CONN2
 ChangePinName(CONN2, 14, 14)
