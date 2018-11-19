@@ -5,8 +5,14 @@
 void
 spi_init(void);
 
+void
+spi_start(void);
+
+void
+spi_end(void);
+
 uint8_t
-spi_tranc(uint8_t c);
+spi(uint8_t c);
 
 void
 spi_write(uint8_t addr, uint8_t v);

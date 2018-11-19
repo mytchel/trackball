@@ -1,0 +1,27 @@
+
+Element["" "" "" "" 9.1700mm 9.3200mm 0.0000 0.0000 0 100 ""]
+(
+	Pin[-6.1700mm -6.3200mm 36.00mil 20.00mil 42.00mil 20.00mil "" "8" "edge2"]
+	Pin[-4.3920mm -6.3200mm 36.00mil 20.00mil 42.00mil 20.00mil "" "7" "edge2"]
+	Pin[-2.6140mm -6.3200mm 36.00mil 20.00mil 42.00mil 20.00mil "" "6" "edge2"]
+	Pin[-0.8360mm -6.3200mm 36.00mil 20.00mil 42.00mil 20.00mil "" "5" "edge2"]
+	Pin[0.9420mm -6.3200mm 36.00mil 20.00mil 42.00mil 20.00mil "" "4" "edge2"]
+	Pin[2.7200mm -6.3200mm 36.00mil 20.00mil 42.00mil 20.00mil "" "3" "edge2"]
+	Pin[4.4980mm -6.3200mm 36.00mil 20.00mil 42.00mil 20.00mil "" "2" "edge2"]
+	Pin[6.2760mm -6.3200mm 36.00mil 20.00mil 42.00mil 20.00mil "" "1" "edge2"]
+	Pin[-6.1700mm 6.2800mm 36.00mil 20.00mil 42.00mil 20.00mil "" "9" "edge2"]
+	Pin[-4.3920mm 6.2800mm 36.00mil 20.00mil 42.00mil 20.00mil "" "10" "edge2"]
+	Pin[-2.6140mm 6.2800mm 36.00mil 20.00mil 42.00mil 20.00mil "" "11" "edge2"]
+	Pin[-0.8360mm 6.2800mm 36.00mil 20.00mil 42.00mil 20.00mil "" "12" "edge2"]
+	Pin[0.9420mm 6.2800mm 36.00mil 20.00mil 42.00mil 20.00mil "" "13" "edge2"]
+	Pin[2.7200mm 6.2800mm 36.00mil 20.00mil 42.00mil 20.00mil "" "14" "edge2"]
+	Pin[4.4980mm 6.2800mm 36.00mil 20.00mil 42.00mil 20.00mil "" "15" "edge2"]
+	Pin[6.2760mm 6.2800mm 36.00mil 20.00mil 42.00mil 20.00mil "" "16" "edge2"]
+	ElementLine [-7.7000mm -7.2200mm 7.9000mm -7.2200mm 10.00mil]
+	ElementLine [7.9000mm -7.2200mm 7.9000mm 7.1800mm 10.00mil]
+	ElementLine [7.9000mm 7.1800mm -7.7000mm 7.1800mm 10.00mil]
+	ElementLine [-7.7000mm 7.1800mm -7.7000mm -7.2200mm 10.00mil]
+	ElementLine [-7.7000mm -4.0200mm 7.9000mm -4.0200mm 10.00mil]
+	ElementLine [-7.7000mm 3.9800mm 7.9000mm 3.9800mm 10.00mil]
+
+	)

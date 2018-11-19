@@ -32,15 +32,25 @@ spi(uint8_t c)
 	return SPDR;
 }
 
+void
+spi_start(void)
+{
+	PORTD &= ~(1<<3);
+}
+
+void
+spi_end(void)
+{
+	PORTD |= (1<<3);
+}
+
 	void
 spi_write(uint8_t addr, uint8_t v)
 {
-	PORTD &= ~(1<<3);
-
+	spi_start();
 	spi(addr | (1<<7));
 	spi(v);
-
-	PORTD |= (1<<3);
+	spi_end();
 }
 
 	uint8_t
@@ -48,12 +58,10 @@ spi_read(uint8_t addr)
 {
 	uint8_t v;
 
-	PORTD &= ~(1<<3);
-
+	spi_start();
 	spi(addr);
 	v = spi(0xff);
-
-	PORTD |= (1<<3);
+	spi_end();
 
 	return v;
 }
