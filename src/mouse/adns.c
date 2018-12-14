@@ -30,40 +30,48 @@
 #include "spi.h"
 
 #include "adns.h"
-#include "adns_srom.h"
 
-void 
+//#include "adns_srom.h"
+#include "adns9800_srom_A5.h"
+
+bool
 srom_download(void)
 {
-	return;
-
 	/* Enable 3k download? */
 	spi_write(0x39, 1 << 1);
 
 	/* Enable srom */
 	spi_write(0x13, 0x1d);
 	/* Sleep for 1 frame (> 120 ns) */
-	_delay_us(1);
+	_delay_ms(10);
 	/* Start srom download */
 	spi_write(0x13, 0x18);
 
 	/* Write data */
 	spi_start();
 	spi(0x62 | (1<<7));
-	_delay_us(1);
+	_delay_us(15);
 	
 	int i;
-	for (i = 0; i < sizeof(SROMA6); i++) {
-		spi(SROMA6[i]);
-		_delay_us(1);
+	char c;
+	for (i = 0; i < sizeof(ADNS_SROM); i++) {
+		c = pgm_read_byte(ADNS_SROM + i);
+		spi(c);
+		_delay_us(15);
 	}
 
 	spi_end();
+	
+	_delay_ms(10);
+
+	return (spi_read(0x2a) == ADNS_SROM_ID);
 }
 
 bool
 adns_init(void)
 {
+	uint8_t c;
+
 	spi_init();
 
 	/* Reset spi */
@@ -82,15 +90,36 @@ adns_init(void)
 	spi_read(0x5);
 	spi_read(0x6);
 
-	srom_download();
+	/* check product */
+	if (spi_read(0x0) != 0x33)
+		return false;
+
+	/* check revision */
+	if (spi_read(0x1) != 0x03)
+		return false;
+
+	if (!srom_download())
+		return false;
 
 	/* Enable laser */
 
-	uint8_t lc = spi_read(0x20);
-	spi_write(0x20, lc & 0xf0);
+	c = spi_read(0x20);
+	c = c & 0xf0;
+//	c = (c & 0xf0) | 0x4;
+	spi_write(0x20, c);
 
-	/* Enable highest resolution */
-	spi_write(0xf, 0x29);
+	/* lift decection threshold */
+//	spi_write(0x2e, 0x1f);
+
+	/* Enable axis snap */
+//	spi_write(0x42, 0x80);
+
+	/* enable seperate resolutions */
+	c = spi_read(0x10);
+	spi_write(0x10, c | (1<<2));
+
+	spi_write(0x0f, 0x29);
+	spi_write(0x2f, 0x29);
 
 	return true;
 }
@@ -114,8 +143,11 @@ adns_motion(int16_t *dx, int16_t *dy)
 	uint16_t yl = spi_read(0x5);
 	uint16_t yh = spi_read(0x6);
 
-	*dx = ((xh << 8) | xl);
-	*dy = ((yh << 8) | yl);
+	uint16_t x = (xh << 8) | xl;
+	uint16_t y = (yh << 8) | yl;
+
+	*dx = x;
+	*dy = y;
 
 	return true;
 }

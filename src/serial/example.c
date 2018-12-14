@@ -28,8 +28,8 @@
 #include <string.h>
 #include <util/delay.h>
 #include "usb_serial.h"
-#include "spi.h"
 
+#include "../mouse/spi.h"
 #include "../mouse/adns.h"
 
 void send_str(const char *s);
@@ -127,6 +127,29 @@ void parse_and_execute_command(const char *buf, uint8_t num)
 
 	sprintf(s, "srom id: 0x%x\r\n", spi_read(0x2a));
 	usb_serial_write((uint8_t *) s, strlen(s));
+
+	sprintf(s, "squall: 0x%x\r\n", ((uint16_t) spi_read(0x07)) << 2);
+	usb_serial_write((uint8_t *) s, strlen(s));
+
+	sprintf(s, "lift dectection: 0x%x\r\n", spi_read(0x2e));
+	usb_serial_write((uint8_t *) s, strlen(s));
+
+	sprintf(s, "c2: 0x%x\r\n", spi_read(0x10));
+	usb_serial_write((uint8_t *) s, strlen(s));
+
+	sprintf(s, "rpt: 0x%x\r\n", spi_read(0x10) & (1<<2));
+	usb_serial_write((uint8_t *) s, strlen(s));
+
+	sprintf(s, "dx res: 0x%x\r\n", spi_read(0x0f));
+	usb_serial_write((uint8_t *) s, strlen(s));
+
+	sprintf(s, "dy res: 0x%x\r\n", spi_read(0x2f));
+	usb_serial_write((uint8_t *) s, strlen(s));
+
+	sprintf(s, "snap: 0x%x\r\n", spi_read(0x42));
+	usb_serial_write((uint8_t *) s, strlen(s));
+
+
 
 	int16_t dx, dy;
 	bool mot = adns_motion(&dx, &dy);

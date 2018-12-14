@@ -18,7 +18,7 @@ OBJCOPY = avr-objcopy
 OBJDUMP = avr-objdump
 
 SRC_C = example.c \
-				spi.c \
+				../mouse/spi.c \
 				../mouse/adns.c \
 				usb_serial.c
 

@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stdarg.h>
 #include <avr/io.h>
+#include <util/delay.h>
 
 void
 spi_init(void)
@@ -48,9 +49,14 @@ spi_end(void)
 spi_write(uint8_t addr, uint8_t v)
 {
 	spi_start();
-	spi(addr | (1<<7));
+
+	spi(addr | 0x80);
+
 	spi(v);
+	_delay_us(20);
+
 	spi_end();
+	_delay_us(100);
 }
 
 	uint8_t
@@ -59,9 +65,15 @@ spi_read(uint8_t addr)
 	uint8_t v;
 
 	spi_start();
-	spi(addr);
+
+	spi(addr & 0x7f);
+	_delay_us(100);
+
 	v = spi(0xff);
+	_delay_us(1);
+
 	spi_end();
+	_delay_us(19);
 
 	return v;
 }

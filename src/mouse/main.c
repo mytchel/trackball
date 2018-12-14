@@ -32,20 +32,6 @@
 
 #include "adns.h"
 
-/*
-	 void test(void)
-	 {
-	 int i;
-
-	 while (true) {
-	 i = ((i + 1) % 10);
-	 usb_mouse_buttons(i < 5, 0, 0);
-	 usb_mouse_move(0, 0, 0, i < 5 ? -1 : 1);
-	 _delay_ms(5);
-	 }
-	 }
- */
-
 int main(void)
 {
 	int8_t l, m, r, s;
@@ -57,12 +43,15 @@ int main(void)
 	PORTB |= (1 << 7) | (1 << 6) | (1 << 5);
 	PORTE |= (1 << 6);
 
+	if (!adns_init()) {
+		while (1)
+			;
+	}
+
 	usb_init();
 	while (!usb_configured()) /* wait */ ;
 
 	_delay_ms(500);
-
-	adns_init();
 
 	while (1) {
 		/* Get buttons */	
@@ -74,18 +63,20 @@ int main(void)
 		usb_mouse_buttons(l, m, r);
 
 		if (adns_motion(&dx, &dy)) {
-			dy = -dy;
-			dx /= 100;
-			dy /= 100;
-		/*
-				 if (s) {
-				 usb_mouse_move(0, 0, dx, dy);
-				 } else */{
-					 usb_mouse_move(dx, dy, 0, 0);
-				 }
-		}
+			dx = dx / 4;
+			dy = -dy / 4;
 
-		_delay_ms(10);
+			if (dx > 127) dx = 127;
+			if (dx < -127) dx = -127;
+			if (dy > 127) dy = 127;
+			if (dy < -127) dy = -127;
+
+			if (s) {
+				usb_mouse_move(0, 0, dx, dy);
+			} else {
+				usb_mouse_move(dx, dy, 0, 0);
+			}
+		}
 	}
 }
 

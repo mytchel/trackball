@@ -1,6 +1,7 @@
 /* Taken from https://github.com/mrjohnk/ADNS-9800 */
 
-const unsigned char SROMA6[3070] = 
+const uint8_t ADNS_SROM_ID = 0xa6;
+const unsigned char PROGMEM ADNS_SROM[3070] = 
 {
 0x03,
 0xa6,
