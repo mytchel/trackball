@@ -65,7 +65,7 @@
 
 #define MOUSE_INTERFACE		0
 #define MOUSE_ENDPOINT		3
-#define MOUSE_SIZE		8
+#define MOUSE_SIZE		    8
 #define MOUSE_BUFFER		EP_DOUBLE_BUFFER
 
 #define DEBUG_INTERFACE		1
@@ -130,9 +130,11 @@ static const uint8_t PROGMEM mouse_hid_report_desc[] = {
 	0x05, 0x01,			//   Usage Page (Generic Desktop)
 	0x09, 0x30,			//   Usage (X)
 	0x09, 0x31,			//   Usage (Y)
-	0x15, 0x81,			//   Logical Minimum (-127)
-	0x25, 0x7F,			//   Logical Maximum (127)
-	0x75, 0x08,			//   Report Size (8),
+	
+	0x16, 0x80, 0x01,//   Logical Minimum (-32767)
+	0x26, 0x7f, 0xff,//   Logical Maximum (32767)
+	0x75, 0x10,			//   Report Size (16),
+
 	0x95, 0x02,			//   Report Count (2),
 	0x81, 0x06,			//   Input (Data, Variable, Relative)
 	0x09, 0x38,			//   Usage (Wheel)
@@ -199,7 +201,7 @@ static const uint8_t PROGMEM config1_descriptor[CONFIG1_DESC_SIZE] = {
 	5,					// bDescriptorType
 	MOUSE_ENDPOINT | 0x80,			// bEndpointAddress
 	0x03,					// bmAttributes (0x03=intr)
-	5, 0,					// wMaxPacketSize
+	8, 0,					// wMaxPacketSize
 	1,					// bInterval
 	// interface descriptor, USB spec 9.6.5, page 267-269, Table 9-12
 	9,					// bLength
@@ -338,15 +340,22 @@ int8_t usb_mouse_buttons(uint8_t left, uint8_t middle, uint8_t right)
 	return usb_mouse_move(0, 0, 0, 0);
 }
 
-// Move the mouse.  x, y and wheel are -127 to 127.  Use 0 for no movement.
-int8_t usb_mouse_move(int8_t x, int8_t y, int8_t wheel, int8_t pan)
+int8_t usb_mouse_move(int16_t x, int16_t y, int8_t w, int8_t p)
 {
 	uint8_t intr_state, timeout;
 
 	if (!usb_configuration) return -1;
-	if (x == -128) x = -127;
-	if (y == -128) y = -127;
-	if (wheel == -128) wheel = -127;
+
+	if (x == -32768) 
+		x = -32767;
+	if (y == -32768) 
+		y = -32767;
+
+	if (w == -128) 
+		w = -127;
+	if (p == -128) 
+		p = -127;
+
 	intr_state = SREG;
 	cli();
 	UENUM = MOUSE_ENDPOINT;
@@ -364,11 +373,15 @@ int8_t usb_mouse_move(int8_t x, int8_t y, int8_t wheel, int8_t pan)
 		cli();
 		UENUM = MOUSE_ENDPOINT;
 	}
+
 	UEDATX = mouse_buttons;
-	UEDATX = x;
-	UEDATX = y;
-	UEDATX = wheel;
-	UEDATX = pan;
+	UEDATX = (x & 0xff);
+	UEDATX = (x >> 8) & 0xff;
+	UEDATX = (y & 0xff);
+	UEDATX = (y >> 8) & 0xff;
+	UEDATX = w;
+	UEDATX = p;
+
 	UEINTX = 0x3A;
 	SREG = intr_state;
 	return 0;

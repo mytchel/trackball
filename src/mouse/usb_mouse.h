@@ -7,7 +7,7 @@ void usb_init(void);			// initialize everything
 uint8_t usb_configured(void);		// is the USB port configured
 
 int8_t usb_mouse_buttons(uint8_t left, uint8_t middle, uint8_t right);
-int8_t usb_mouse_move(int8_t x, int8_t y, int8_t wheel, int8_t pan);
+int8_t usb_mouse_move(int16_t x, int16_t y, int8_t wheel, int8_t pan);
 
 int8_t usb_debug_putchar(uint8_t c);	// transmit a character
 void usb_debug_flush_output(void);	// immediately transmit any buffered output

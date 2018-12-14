@@ -34,7 +34,7 @@
 
 int main(void)
 {
-	int8_t l, m, r, s;
+	int8_t l, m, r, s, sdx, sdy;
 	int16_t dx, dy;
 
 	DDRD |= (1<<2);
@@ -63,16 +63,19 @@ int main(void)
 		usb_mouse_buttons(l, m, r);
 
 		if (adns_motion(&dx, &dy)) {
-			dx = dx / 4;
-			dy = -dy / 4;
-
-			if (dx > 127) dx = 127;
-			if (dx < -127) dx = -127;
-			if (dy > 127) dy = 127;
-			if (dy < -127) dy = -127;
+			dx = dx;
+			dy = -dy;
 
 			if (s) {
-				usb_mouse_move(0, 0, dx, dy);
+				if (dx > 127) dx = 127;
+				if (dx < -127) dx = -127;
+				if (dy > 127) dy = 127;
+				if (dy < -127) dy = -127;
+
+				sdx = (int8_t) dx;
+				sdy = (int8_t) dy;
+
+				usb_mouse_move(0, 0, sdx, sdy);
 			} else {
 				usb_mouse_move(dx, dy, 0, 0);
 			}
