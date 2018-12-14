@@ -138,6 +138,9 @@ static const uint8_t PROGMEM mouse_hid_report_desc[] = {
 	0x95, 0x02,			//   Report Count (2),
 	0x81, 0x06,			//   Input (Data, Variable, Relative)
 	0x09, 0x38,			//   Usage (Wheel)
+	0x15, 0x81,			//   Logical Minimum (-127)
+	0x25, 0x7F,			//   Logical Maximum (127)
+	0x75, 0x08,			//   Report Size (8),
 	0x95, 0x01,			//   Report Count (1),
 	0x81, 0x06,			//   Input (Data, Variable, Relative)
 	0x05, 0x0c,     //   Usage Page (Consumer Devices)
@@ -201,7 +204,7 @@ static const uint8_t PROGMEM config1_descriptor[CONFIG1_DESC_SIZE] = {
 	5,					// bDescriptorType
 	MOUSE_ENDPOINT | 0x80,			// bEndpointAddress
 	0x03,					// bmAttributes (0x03=intr)
-	8, 0,					// wMaxPacketSize
+	9, 0,					// wMaxPacketSize
 	1,					// bInterval
 	// interface descriptor, USB spec 9.6.5, page 267-269, Table 9-12
 	9,					// bLength
@@ -340,7 +343,7 @@ int8_t usb_mouse_buttons(uint8_t left, uint8_t middle, uint8_t right)
 	return usb_mouse_move(0, 0, 0, 0);
 }
 
-int8_t usb_mouse_move(int16_t x, int16_t y, int8_t w, int8_t p)
+int8_t usb_mouse_move(int16_t x, int16_t y, int8_t sx, int8_t sy)
 {
 	uint8_t intr_state, timeout;
 
@@ -351,10 +354,10 @@ int8_t usb_mouse_move(int16_t x, int16_t y, int8_t w, int8_t p)
 	if (y == -32768) 
 		y = -32767;
 
-	if (w == -128) 
-		w = -127;
-	if (p == -128) 
-		p = -127;
+	if (sx == -128) 
+		sx = -127;
+	if (sy == -128) 
+		sy = -127;
 
 	intr_state = SREG;
 	cli();
@@ -379,8 +382,8 @@ int8_t usb_mouse_move(int16_t x, int16_t y, int8_t w, int8_t p)
 	UEDATX = (x >> 8) & 0xff;
 	UEDATX = (y & 0xff);
 	UEDATX = (y >> 8) & 0xff;
-	UEDATX = w;
-	UEDATX = p;
+	UEDATX = sy;
+	UEDATX = sx;
 
 	UEINTX = 0x3A;
 	SREG = intr_state;

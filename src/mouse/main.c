@@ -67,6 +67,9 @@ int main(void)
 			dy = -dy;
 
 			if (s) {
+				dx /= 1;
+				dy /= -1;
+
 				if (dx > 127) dx = 127;
 				if (dx < -127) dx = -127;
 				if (dy > 127) dy = 127;
