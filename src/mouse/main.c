@@ -11,11 +11,12 @@
 
 int main(void)
 {
-	int scroll_delay = 0;
+	int scroll_delay, light, light_delay;
 	int8_t l, m, r, s;
 	int16_t dx, dy;
 
 	DDRD |= (1<<2);
+	DDRC |= (1<<7);
 
 	/* Enable pull ups on buttons */
 	PORTB |= (1 << 7) | (1 << 6) | (1 << 5);
@@ -31,6 +32,9 @@ int main(void)
 
 	_delay_ms(500);
 
+	scroll_delay = 0;
+	light = 0;
+	light_delay = 0;
 	while (1) {
 		scroll_delay = (scroll_delay + 1) % 4;
 
@@ -43,6 +47,7 @@ int main(void)
 		usb_mouse_buttons(l, m, r);
 
 		if (adns_motion(&dx, &dy)) {
+			light = 50;
 			if (s) {
 				dx /= 2;
 				dy /= -2;
@@ -65,7 +70,21 @@ int main(void)
 			}
 		}
 
-		_delay_ms(10);
+		for (int i = 0; i < 100; i++) {
+			if (i >= light) {
+				PORTC &= ~(1<<7);
+			} else {
+				PORTC |= (1<<7);
+			}
+			_delay_us(10);
+		}
+
+		if (light > 0) {
+			if (light_delay++ == 10) {
+				light--;
+				light_delay = 0;
+			}
+		}
 	}
 }
 
