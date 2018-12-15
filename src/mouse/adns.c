@@ -95,8 +95,8 @@ adns_init(void)
 	c = spi_read(0x10);
 	spi_write(0x10, c | (1<<2));
 
-	spi_write(0x0f, 0x4); /* x resolution */
-	spi_write(0x2f, 0x4); /* y resolution */
+	spi_write(0x0f, 0x5); /* x resolution */
+	spi_write(0x2f, 0x5); /* y resolution */
 
 	return true;
 }
@@ -124,7 +124,7 @@ adns_motion(int16_t *dx, int16_t *dy)
 	uint16_t y = (yh << 8) | yl;
 
 	*dx = x;
-	*dy = y;
+	*dy = -y;
 
 	return true;
 }

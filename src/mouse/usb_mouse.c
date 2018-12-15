@@ -241,6 +241,10 @@ static const struct descriptor_list_struct {
 // zero when we are not configured, non-zero when enumerated
 static volatile uint8_t usb_configuration=0;
 
+// the time remaining before we transmit any partially full
+// packet, or send a zero length packet.
+static volatile uint8_t debug_flush_timer=0;
+
 // which buttons are currently pressed
 static uint8_t mouse_buttons=0;
 
