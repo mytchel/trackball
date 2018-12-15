@@ -118,8 +118,8 @@ adns_init(void)
 	c = spi_read(0x10);
 	spi_write(0x10, c | (1<<2));
 
-	spi_write(0x0f, 0x29);
-	spi_write(0x2f, 0x29);
+	spi_write(0x0f, 0x4); /* x resolution */
+	spi_write(0x2f, 0x4); /* y resolution */
 
 	return true;
 }

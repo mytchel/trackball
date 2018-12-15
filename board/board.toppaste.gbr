@@ -1,13 +1,31 @@
-G04 start of page 13 for group -4015 idx -4015 *
+G04 start of page 16 for group -4015 idx -4015 *
 G04 Title: (unknown), toppaste *
 G04 Creator: pcb 4.1.2 *
-G04 CreationDate: Sun Sep 16 08:13:39 2018 UTC *
+G04 CreationDate: Fri Sep 21 09:06:42 2018 UTC *
 G04 For: mytch *
 G04 Format: Gerber/RS-274X *
-G04 PCB-Dimensions (mil): 3543.31 1968.50 *
+G04 PCB-Dimensions (mil): 3937.01 2755.91 *
 G04 PCB-Coordinate-Origin: lower left *
 %MOIN*%
 %FSLAX25Y25*%
 %LNTOPPASTE*%
-%ADD11C,0.0100*%
+%ADD87C,0.0001*%
+G54D87*G36*
+X155600Y176342D02*X152200D01*
+Y172342D01*
+X155600D01*
+Y176342D01*
+G37*
+G36*
+X147800D02*X144400D01*
+Y172342D01*
+X147800D01*
+Y176342D01*
+G37*
+G36*
+X151700Y168142D02*X148300D01*
+Y164142D01*
+X151700D01*
+Y168142D01*
+G37*
 M02*

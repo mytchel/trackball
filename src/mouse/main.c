@@ -34,8 +34,8 @@
 
 int main(void)
 {
-	int8_t l, m, r, s, sdx, sdy;
-	int16_t dx, dy;
+	int8_t l, m, r, s;
+	int16_t dx, dy, sdx, sdy;
 
 	DDRD |= (1<<2);
 
@@ -53,6 +53,10 @@ int main(void)
 
 	_delay_ms(500);
 
+	int scroll_delay = 0;
+	sdx = 0;
+	sdy = 0;
+
 	while (1) {
 		/* Get buttons */	
 		l = !((PINB >> 7) & 1);
@@ -67,22 +71,44 @@ int main(void)
 			dy = -dy;
 
 			if (s) {
+				int16_t t = 1;
+				int8_t v = 1;
+
+				sdx = sdy = 0;
+
+				for (int i = 1; i < 5; i++) {
+					if (dx > t*i) sdx = v*i;
+					if (dx < -t*i) sdx = -v*i;
+					if (dy > t*i) sdy = -v*i;
+					if (dy < -t*i) sdy = v*i;
+				}
+/*
 				dx /= 1;
 				dy /= -1;
 
-				if (dx > 127) dx = 127;
-				if (dx < -127) dx = -127;
-				if (dy > 127) dy = 127;
-				if (dy < -127) dy = -127;
+				sdx += dx;
+				sdy += dy;
 
-				sdx = (int8_t) dx;
-				sdy = (int8_t) dy;
+				if (sdx > 127) sdx = 127;
+				if (sdx < -127) sdx = -127;
+				if (sdy > 127) sdy = 127;
+				if (sdy < -127) sdy = -127;
+*/
+				if (scroll_delay == 0) {
+					usb_mouse_move(0, 0, (int8_t) sdx, (int8_t) sdy);
+					usb_mouse_move(0, 0, 0, 0);
+					sdx = 0;
+					sdy = 0;
+				}
 
-				usb_mouse_move(0, 0, sdx, sdy);
+				scroll_delay = (scroll_delay + 1) % 4;
 			} else {
 				usb_mouse_move(dx, dy, 0, 0);
+				scroll_delay = 0;
 			}
 		}
+
+		_delay_ms(10);
 	}
 }
 
