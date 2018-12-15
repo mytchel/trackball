@@ -36,8 +36,6 @@ int main(void)
 	light = 0;
 	light_delay = 0;
 	while (1) {
-		scroll_delay = (scroll_delay + 1) % 4;
-
 		/* Get buttons */	
 		l = !((PINB >> 7) & 1);
 		m = !((PINB >> 6) & 1);
@@ -49,8 +47,8 @@ int main(void)
 		if (adns_motion(&dx, &dy)) {
 			light = 50;
 			if (s) {
-				dx /= 2;
-				dy /= -2;
+				dx /= 1;
+				dy /= -1;
 
 				if (dx > 127) 
 					dx = 127;
@@ -64,6 +62,8 @@ int main(void)
 				if (scroll_delay == 0) {
 					usb_mouse_move(0, 0, (int8_t) dx, (int8_t) dy);
 				}
+		
+				scroll_delay = (scroll_delay + 1) % 6;
 			} else {
 				usb_mouse_move(dx, dy, 0, 0);
 				scroll_delay = 0;
