@@ -68,16 +68,11 @@
 #define MOUSE_SIZE		    8
 #define MOUSE_BUFFER		EP_DOUBLE_BUFFER
 
-#define DEBUG_INTERFACE		1
-#define DEBUG_TX_ENDPOINT	4
-#define DEBUG_TX_SIZE		32
-#define DEBUG_TX_BUFFER		EP_DOUBLE_BUFFER
-
+#define MAX_ENDPOINT      3
 static const uint8_t PROGMEM endpoint_config_table[] = {
 	0,
 	0,
 	1, EP_TYPE_INTERRUPT_IN,  EP_SIZE(MOUSE_SIZE) | MOUSE_BUFFER,
-	1, EP_TYPE_INTERRUPT_IN,  EP_SIZE(DEBUG_TX_SIZE) | DEBUG_TX_BUFFER
 };
 
 
@@ -153,29 +148,15 @@ static const uint8_t PROGMEM mouse_hid_report_desc[] = {
 	0xC0				// End Collection
 };
 
-static const uint8_t PROGMEM debug_hid_report_desc[] = {
-	0x06, 0x31, 0xFF,			// Usage Page 0xFF31 (vendor defined)
-	0x09, 0x74,				// Usage 0x74
-	0xA1, 0x53,				// Collection 0x53
-	0x75, 0x08,				// report size = 8 bits
-	0x15, 0x00,				// logical minimum = 0
-	0x26, 0xFF, 0x00,			// logical maximum = 255
-	0x95, DEBUG_TX_SIZE,			// report count
-	0x09, 0x75,				// usage
-	0x81, 0x02,				// Input (array)
-	0xC0					// end collection
-};
-
-#define CONFIG1_DESC_SIZE        (9+9+9+7+9+9+7)
+#define CONFIG1_DESC_SIZE        (9+9+9+7)
 #define MOUSE_HID_DESC_OFFSET    (9+9)
-#define DEBUG_HID_DESC_OFFSET    (9+9+9+7+9)
 static const uint8_t PROGMEM config1_descriptor[CONFIG1_DESC_SIZE] = {
 	// configuration descriptor, USB spec 9.6.3, page 264-266, Table 9-10
 	9, 					// bLength;
 	2,					// bDescriptorType;
 	LSB(CONFIG1_DESC_SIZE),			// wTotalLength
 	MSB(CONFIG1_DESC_SIZE),
-	2,					// bNumInterfaces
+	1,					// bNumInterfaces
 	1,					// bConfigurationValue
 	0,					// iConfiguration
 	0xC0,					// bmAttributes
@@ -206,32 +187,6 @@ static const uint8_t PROGMEM config1_descriptor[CONFIG1_DESC_SIZE] = {
 	0x03,					// bmAttributes (0x03=intr)
 	9, 0,					// wMaxPacketSize
 	1,					// bInterval
-	// interface descriptor, USB spec 9.6.5, page 267-269, Table 9-12
-	9,					// bLength
-	4,					// bDescriptorType
-	DEBUG_INTERFACE,			// bInterfaceNumber
-	0,					// bAlternateSetting
-	1,					// bNumEndpoints
-	0x03,					// bInterfaceClass (0x03 = HID)
-	0x00,					// bInterfaceSubClass
-	0x00,					// bInterfaceProtocol
-	0,					// iInterface
-	// HID interface descriptor, HID 1.11 spec, section 6.2.1
-	9,					// bLength
-	0x21,					// bDescriptorType
-	0x11, 0x01,				// bcdHID
-	0,					// bCountryCode
-	1,					// bNumDescriptors
-	0x22,					// bDescriptorType
-	sizeof(debug_hid_report_desc),		// wDescriptorLength
-	0,
-	// endpoint descriptor, USB spec 9.6.6, page 269-271, Table 9-13
-	7,					// bLength
-	5,					// bDescriptorType
-	DEBUG_TX_ENDPOINT | 0x80,		// bEndpointAddress
-	0x03,					// bmAttributes (0x03=intr)
-	DEBUG_TX_SIZE, 0,			// wMaxPacketSize
-	1					// bInterval
 };
 
 // If you're desperate for a little extra code memory, these strings
@@ -270,8 +225,6 @@ static const struct descriptor_list_struct {
 	{0x0200, 0x0000, config1_descriptor, sizeof(config1_descriptor)},
 	{0x2200, MOUSE_INTERFACE, mouse_hid_report_desc, sizeof(mouse_hid_report_desc)},
 	{0x2100, MOUSE_INTERFACE, config1_descriptor+MOUSE_HID_DESC_OFFSET, 9},
-	{0x2200, DEBUG_INTERFACE, debug_hid_report_desc, sizeof(debug_hid_report_desc)},
-	{0x2100, DEBUG_INTERFACE, config1_descriptor+DEBUG_HID_DESC_OFFSET, 9},
 	{0x0300, 0x0000, (const uint8_t *)&string0, 4},
 	{0x0301, 0x0409, (const uint8_t *)&string1, sizeof(STR_MANUFACTURER)},
 	{0x0302, 0x0409, (const uint8_t *)&string2, sizeof(STR_PRODUCT)}
@@ -287,10 +240,6 @@ static const struct descriptor_list_struct {
 
 // zero when we are not configured, non-zero when enumerated
 static volatile uint8_t usb_configuration=0;
-
-// the time remaining before we transmit any partially full
-// packet, or send a zero length packet.
-static volatile uint8_t debug_flush_timer=0;
 
 // which buttons are currently pressed
 static uint8_t mouse_buttons=0;
@@ -390,80 +339,6 @@ int8_t usb_mouse_move(int16_t x, int16_t y, int8_t sx, int8_t sy)
 	return 0;
 }
 
-// transmit a character.  0 returned on success, -1 on error
-int8_t usb_debug_putchar(uint8_t c)
-{
-	static uint8_t previous_timeout=0;
-	uint8_t timeout, intr_state;
-
-	// if we're not online (enumerated and configured), error
-	if (!usb_configuration) return -1;
-	// interrupts are disabled so these functions can be
-	// used from the main program or interrupt context,
-	// even both in the same program!
-	intr_state = SREG;
-	cli();
-	UENUM = DEBUG_TX_ENDPOINT;
-	// if we gave up due to timeout before, don't wait again
-	if (previous_timeout) {
-		if (!(UEINTX & (1<<RWAL))) {
-			SREG = intr_state;
-			return -1;
-		}
-		previous_timeout = 0;
-	}
-	// wait for the FIFO to be ready to accept data
-	timeout = UDFNUML + 4;
-	while (1) {
-		// are we ready to transmit?
-		if (UEINTX & (1<<RWAL)) break;
-		SREG = intr_state;
-		// have we waited too long?
-		if (UDFNUML == timeout) {
-			previous_timeout = 1;
-			return -1;
-		}
-		// has the USB gone offline?
-		if (!usb_configuration) return -1;
-		// get ready to try checking again
-		intr_state = SREG;
-		cli();
-		UENUM = DEBUG_TX_ENDPOINT;
-	}
-	// actually write the byte into the FIFO
-	UEDATX = c;
-	// if this completed a packet, transmit it now!
-	if (!(UEINTX & (1<<RWAL))) {
-		UEINTX = 0x3A;
-		debug_flush_timer = 0;
-	} else {
-		debug_flush_timer = 2;
-	}
-	SREG = intr_state;
-	return 0;
-}
-
-
-// immediately transmit any buffered output.
-void usb_debug_flush_output(void)
-{
-	uint8_t intr_state;
-
-	intr_state = SREG;
-	cli();
-	if (debug_flush_timer) {
-		UENUM = DEBUG_TX_ENDPOINT;
-		while ((UEINTX & (1<<RWAL))) {
-			UEDATX = 0;
-		}
-		UEINTX = 0x3A;
-		debug_flush_timer = 0;
-	}
-	SREG = intr_state;
-}
-
-
-
 /**************************************************************************
  *
  *  Private Functions - not intended for general user consumption....
@@ -477,7 +352,7 @@ void usb_debug_flush_output(void)
 //
 ISR(USB_GEN_vect)
 {
-	uint8_t intbits, t;
+	uint8_t intbits;
 
 	intbits = UDINT;
 	UDINT = 0;
@@ -488,19 +363,6 @@ ISR(USB_GEN_vect)
 		UECFG1X = EP_SIZE(ENDPOINT0_SIZE) | EP_SINGLE_BUFFER;
 		UEIENX = (1<<RXSTPE);
 		usb_configuration = 0;
-	}
-	if ((intbits & (1<<SOFI)) && usb_configuration) {
-		t = debug_flush_timer;
-		if (t) {
-			debug_flush_timer = -- t;
-			if (!t) {
-				UENUM = DEBUG_TX_ENDPOINT;
-				while ((UEINTX & (1<<RWAL))) {
-					UEDATX = 0;
-				}
-				UEINTX = 0x3A;
-			}
-		}
 	}
 }
 
@@ -557,6 +419,7 @@ ISR(USB_COM_vect)
 		wLength = UEDATX;
 		wLength |= (UEDATX << 8);
 		UEINTX = ~((1<<RXSTPI) | (1<<RXOUTI) | (1<<TXINI));
+
 		if (bRequest == GET_DESCRIPTOR) {
 			list = (const uint8_t *)descriptor_list;
 			for (i=0; ; i++) {
@@ -609,7 +472,7 @@ ISR(USB_COM_vect)
 			usb_configuration = wValue;
 			usb_send_in();
 			cfg = endpoint_config_table;
-			for (i=1; i<5; i++) {
+			for (i=1; i<4; i++) {
 				UENUM = i;
 				en = pgm_read_byte(cfg++);
 				UECONX = en;
@@ -686,26 +549,6 @@ ISR(USB_COM_vect)
 					usb_send_in();
 					return;
 				}
-			}
-		}
-		if (wIndex == DEBUG_INTERFACE) {
-			if (bRequest == HID_GET_REPORT && bmRequestType == 0xA1) {
-				len = wLength;
-				do {
-					// wait for host ready for IN packet
-					do {
-						i = UEINTX;
-					} while (!(i & ((1<<TXINI)|(1<<RXOUTI))));
-					if (i & (1<<RXOUTI)) return;	// abort
-					// send IN packet
-					n = len < ENDPOINT0_SIZE ? len : ENDPOINT0_SIZE;
-					for (i = n; i; i--) {
-						UEDATX = 0;
-					}
-					len -= n;
-					usb_send_in();
-				} while (len || n == ENDPOINT0_SIZE);
-				return;
 			}
 		}
 	}

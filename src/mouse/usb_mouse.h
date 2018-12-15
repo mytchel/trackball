@@ -9,13 +9,6 @@ uint8_t usb_configured(void);		// is the USB port configured
 int8_t usb_mouse_buttons(uint8_t left, uint8_t middle, uint8_t right);
 int8_t usb_mouse_move(int16_t x, int16_t y, int8_t sx, int8_t sy);
 
-int8_t usb_debug_putchar(uint8_t c);	// transmit a character
-void usb_debug_flush_output(void);	// immediately transmit any buffered output
-#define USB_DEBUG_HID
-
-
-
-
 // Everything below this point is only intended for usb_serial.c
 #ifdef USB_SERIAL_PRIVATE_INCLUDE
 #include <avr/io.h>
@@ -37,8 +30,6 @@ void usb_debug_flush_output(void);	// immediately transmit any buffered output
 			((s) == 32 ? 0x20 :	\
 			((s) == 16 ? 0x10 :	\
 			             0x00)))
-
-#define MAX_ENDPOINT		4
 
 #define LSB(n) (n & 255)
 #define MSB(n) ((n >> 8) & 255)
