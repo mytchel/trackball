@@ -537,6 +537,9 @@ ISR(USB_COM_vect)
 					UEDATX = 0;
 					UEDATX = 0;
 					UEDATX = 0;
+					UEDATX = 0;
+					UEDATX = 0;
+					UEDATX = 0;
 					usb_send_in();
 					return;
 				}
