@@ -38,11 +38,36 @@ int main(void)
 	sy = 0;
 	
 	while (1) {
-		/* Get buttons */	
-		l = !((PINB >> 7) & 1);
-		m = !((PINB >> 6) & 1);
-		r = !((PINB >> 5) & 1);
-		s = !((PINE >> 6) & 1);
+		l = 0;
+		m = 0;
+		r = 0;
+		s = 0;
+		for (int i = 0; i < 100; i++) {
+			l += !((PINB >> 7) & 1);
+			m += !((PINB >> 6) & 1);
+			r += !((PINB >> 5) & 1);
+			s += !((PINE >> 6) & 1);
+
+			if (i >= light) {
+				PORTC &= ~(1<<7);
+			} else {
+				PORTC |= (1<<7);
+			}
+			_delay_us(10);
+		}
+
+		if (light > 0) {
+			if (light_delay++ == 10) {
+				light--;
+				light_delay = 0;
+			}
+		}
+
+		l = l > 80;
+		m = m > 80;
+		r = r > 80;
+		s = s > 80;
+
 		usb_mouse_buttons(l, m, r);
 
 		if (adns_motion(&dx, &dy)) {
@@ -65,28 +90,12 @@ int main(void)
 					dy = sy / SCROLL_LIM;//sy > 0 ? 1 : -1;
 					sy = 0;
 				}
-					
+
 				usb_mouse_move(0, 0, dx, dy);
 			} else {
 				usb_mouse_move(dx, dy, 0, 0);
 				sx = 0;
 				sy = 0;
-			}
-		}
-
-		for (int i = 0; i < 100; i++) {
-			if (i >= light) {
-				PORTC &= ~(1<<7);
-			} else {
-				PORTC |= (1<<7);
-			}
-			_delay_us(10);
-		}
-
-		if (light > 0) {
-			if (light_delay++ == 10) {
-				light--;
-				light_delay = 0;
 			}
 		}
 	}
