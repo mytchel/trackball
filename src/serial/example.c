@@ -41,6 +41,9 @@ int main(void)
 	char buf[32];
 	uint8_t n;
 
+	PORTB |= (1<<7)|(1<<6)|(1<<5);
+	PORTE |= (1<<6);
+
 	adns_init();
 
 	usb_init();
@@ -59,10 +62,12 @@ int main(void)
 
 		// and then listen for commands and process them
 		while (1) {
+			/*
 			send_str(PSTR("> "));
 			n = recv_str(buf, sizeof(buf));
 			if (n == 255) break;
 			send_str(PSTR("\r\n"));
+			*/
 			parse_and_execute_command(buf, n);
 		}
 	}
@@ -118,8 +123,8 @@ uint8_t recv_str(char *buf, uint8_t size)
 //
 void parse_and_execute_command(const char *buf, uint8_t num)
 {
-	char s[32];
-
+	char c[128];
+/*
 	sprintf(s, "product id: 0x%x\r\n", spi_read(0x0));
 	usb_serial_write((uint8_t *) s, strlen(s));
 	sprintf(s, "revision id: 0x%x\r\n", spi_read(0x1));
@@ -149,18 +154,20 @@ void parse_and_execute_command(const char *buf, uint8_t num)
 	sprintf(s, "snap: 0x%x\r\n", spi_read(0x42));
 	usb_serial_write((uint8_t *) s, strlen(s));
 
-
+*/
 
 	int16_t dx, dy;
 	bool mot = adns_motion(&dx, &dy);
 
-	sprintf(s, "mot: %i\r\n", mot);
-	usb_serial_write((uint8_t *) s, strlen(s));
+	int l, m, r, s;
 
-	sprintf(s, "dx : %i\r\n", dx);
-	usb_serial_write((uint8_t *) s, strlen(s));
-	sprintf(s, "dy : %i\r\n", dy);
-	usb_serial_write((uint8_t *) s, strlen(s));
+	l = !((PINB>>7)&1);
+	m = !((PINB>>6)&1);
+	r = !((PINB>>5)&1);
+	s = !((PINE>>6)&1);
 
+	sprintf(c, "%i %i %i %i : %i : %5i,%5i\r\n", l, m, r, s, mot, dx, dy);
+	usb_serial_write((uint8_t *) c, strlen(c));
+	_delay_ms(10);
 }
 
