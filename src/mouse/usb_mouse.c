@@ -302,14 +302,24 @@ int8_t usb_mouse_move(int16_t x, int16_t y, int8_t sx, int8_t sy)
 
 	if (!usb_configuration) return -1;
 
-	if (x == -32768) 
+	if (x > 32767) 
+		x = 32767;
+	if (x < -32767) 
 		x = -32767;
-	if (y == -32768) 
+
+	if (y > 32767) 
+		y = 32767;
+	if (y < -32767) 
 		y = -32767;
 
-	if (sx == -128) 
+	if (sx > 127) 
+		sx = 127;
+	if (sx < -127) 
 		sx = -127;
-	if (sy == -128) 
+
+	if (sy > 127) 
+		sy = 127;
+	if (sy < -127) 
 		sy = -127;
 
 	intr_state = SREG;
