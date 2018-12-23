@@ -3,5 +3,5 @@ bool
 adns_init(void);
 
 bool
-adns_motion(int16_t *dx, int16_t *dy);
+adns_motion(int8_t *dx, int8_t *dy);
 

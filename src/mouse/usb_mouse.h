@@ -7,7 +7,7 @@ void usb_init(void);			// initialize everything
 uint8_t usb_configured(void);		// is the USB port configured
 
 int8_t usb_mouse_buttons(uint8_t left, uint8_t middle, uint8_t right);
-int8_t usb_mouse_move(int16_t x, int16_t y, int8_t sx, int8_t sy);
+int8_t usb_mouse_move(int8_t x, int8_t y, int8_t sx, int8_t sy);
 
 // Everything below this point is only intended for usb_serial.c
 #ifdef USB_SERIAL_PRIVATE_INCLUDE
