@@ -102,7 +102,7 @@ adns_init(void)
 }
 
 bool
-adns_motion(int16_t *dx, int16_t *dy)
+adns_motion(int8_t *dx, int8_t *dy)
 {
 	uint8_t mot = spi_read(0x2);
 
@@ -123,8 +123,8 @@ adns_motion(int16_t *dx, int16_t *dy)
 	uint16_t x = (xh << 8) | xl;
 	uint16_t y = (yh << 8) | yl;
 
-	*dx = x;
-	*dy = -y;
+	*dx = (int8_t) x;
+	*dy = (int8_t) -y;
 
 	return true;
 }

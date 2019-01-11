@@ -126,9 +126,9 @@ static const uint8_t PROGMEM mouse_hid_report_desc[] = {
 	0x09, 0x30,			//   Usage (X)
 	0x09, 0x31,			//   Usage (Y)
 	
-	0x16, 0x80, 0x01,//   Logical Minimum (-32767)
-	0x26, 0x7f, 0xff,//   Logical Maximum (32767)
-	0x75, 0x10,			//   Report Size (16),
+	0x15, 0x81,//   Logical Minimum (-127)
+	0x25, 0x7f,//   Logical Maximum (127)
+	0x75, 0x08,			//   Report Size (8)
 
 	0x95, 0x02,			//   Report Count (2),
 	0x81, 0x06,			//   Input (Data, Variable, Relative)
@@ -296,31 +296,16 @@ int8_t usb_mouse_buttons(uint8_t left, uint8_t middle, uint8_t right)
 	return usb_mouse_move(0, 0, 0, 0);
 }
 
-int8_t usb_mouse_move(int16_t x, int16_t y, int8_t sx, int8_t sy)
+int8_t usb_mouse_move(int8_t x, int8_t y, int8_t sx, int8_t sy)
 {
 	uint8_t intr_state, timeout;
 
 	if (!usb_configuration) return -1;
 
-	if (x > 32767) 
-		x = 32767;
-	if (x < -32767) 
-		x = -32767;
-
-	if (y > 32767) 
-		y = 32767;
-	if (y < -32767) 
-		y = -32767;
-
-	if (sx > 127) 
-		sx = 127;
-	if (sx < -127) 
-		sx = -127;
-
-	if (sy > 127) 
-		sy = 127;
-	if (sy < -127) 
-		sy = -127;
+	if (x == -128) x = -127;
+	if (y == -128) y = -127;
+	if (sx == -128) sx = -127;
+	if (sy == -128) sy = -127;
 
 	intr_state = SREG;
 	cli();
@@ -341,10 +326,8 @@ int8_t usb_mouse_move(int16_t x, int16_t y, int8_t sx, int8_t sy)
 	}
 
 	UEDATX = mouse_buttons;
-	UEDATX = (x & 0xff);
-	UEDATX = (x >> 8) & 0xff;
-	UEDATX = (y & 0xff);
-	UEDATX = (y >> 8) & 0xff;
+	UEDATX = x;
+	UEDATX = y;
 	UEDATX = sy;
 	UEDATX = sx;
 
@@ -544,8 +527,6 @@ ISR(USB_COM_vect)
 				if (bRequest == HID_GET_REPORT) {
 					usb_wait_in_ready();
 					UEDATX = mouse_buttons;
-					UEDATX = 0;
-					UEDATX = 0;
 					UEDATX = 0;
 					UEDATX = 0;
 					UEDATX = 0;

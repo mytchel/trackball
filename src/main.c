@@ -12,7 +12,7 @@
 int main(void)
 {
 	int light, light_delay;
-	int16_t dx, dy, sx, sy;
+	int8_t dx, dy, sx, sy;
 	int8_t l, m, r, s;
 
 	DDRD |= (1<<2);
