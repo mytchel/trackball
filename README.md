@@ -14,13 +14,13 @@ Parts:
 - A 3D printed cradle 
 - And the PCB.
 
-The schematics for the PCB are under (board/)[board/] and were created in GEDA.
-The cradle was designed using OpenSCAD and is at (cradle/mouse.scad)[cradle/mouse.scad].
-I think (cradle/mouse3.stl)[cradle/mouse3.stl] is the file I had printed.
-And the code is under (src)[src] and is based off the 
+The schematics for the PCB are under [board/](board/) and were created in GEDA.
+The cradle was designed using OpenSCAD and is at [cradle/mouse.scad](cradle/mouse.scad).
+I think [cradle/mouse3.stl](cradle/mouse3.stl) is the file I had printed.
+And the code is under [src](src) and is based off the 
 [mouse example for the Teensy](https://www.pjrc.com/teensy/usb_mouse.html).
 
-Under (case/)[case] is the beginnings of the design for a case, though I think
+Under [case/](case) is the beginnings of the design for a case, though I think
 the PCB needs some changes before this progresses much. Currently the case is
 a piece of 3mm acrylic with cutouts for the switches, then heated and bent into
 shape. In future I will move away from the keyboard keys to micro switches. Keys
