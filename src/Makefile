@@ -16,17 +16,24 @@ CC = avr-gcc
 OBJCOPY = avr-objcopy
 OBJDUMP = avr-objdump
 
-SRC_C = main.c \
-				adns.c \
-				spi.c \
-				usb_mouse.c
+MOUSE_SRC_C = main.c \
+							adns.c \
+							spi.c \
+							usb_mouse.c
 
-OBJ = $(SRC_A:%.S=%.o) $(SRC_C:%.c=%.o)
+MOUSE_OBJ = $(MOUSE_SRC_A:%.S=%.o) $(MOUSE_SRC_C:%.c=%.o)
+
+SERIAL_SRC_C = serial.c \
+							 spi.c \
+							 adns.c \
+							 usb_serial.c
+
+SERIAL_OBJ = $(SERIAL_SRC_A:%.S=%.o) $(SERIAL_SRC_C:%.c=%.o)
 
 .SUFFIXES:
 .SUFFIXES: .c .S .h .o .elf .hex .list
 
-all: out.hex out.list
+all: mouse.hex 
 
 .S.o:
 	$(CC) ${CFLAGS} -x assembler-with-cpp -c $< -o $@
@@ -40,14 +47,20 @@ all: out.hex out.list
 .elf.hex:
 	$(OBJCOPY) -j .text -j .data -O ihex $< $@
 	
-out.elf: $(OBJ)
-	$(CC) -o out.elf $(OBJ) $(LDFLAGS)
+mouse.elf: $(MOUSE_OBJ)
+	$(CC) -o mouse.elf $(MOUSE_OBJ) $(LDFLAGS)
 
-flash: out.hex
-	$(AVRDUDE) -U flash:w:out.hex:i
+serial.elf: $(SERIAL_OBJ)
+	$(CC) -o serial.elf $(SERIAL_OBJ) $(LDFLAGS)
+
+flash: mouse.hex
+	$(AVRDUDE) -U flash:w:mouse.hex:i
+
+flash-serial: serial.hex
+	$(AVRDUDE) -U flash:w:serial.hex:i
 
 clean: 
-	rm -f *.elf *.hex *.list $(OBJ)
+	rm -f *.elf *.hex *.list $(MOUSE_OBJ) $(SERIAL_OBJ)
 
 fuse:
 	$(AVRDUDE) -U lfuse:w:0xce:m -U hfuse:w:0xd9:m -U efuse:w:0xff:m

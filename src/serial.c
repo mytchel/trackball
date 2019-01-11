@@ -156,7 +156,7 @@ void parse_and_execute_command(const char *buf, uint8_t num)
 
 */
 
-	int16_t dx, dy;
+	int8_t dx, dy;
 	bool mot = adns_motion(&dx, &dy);
 
 	int l, m, r, s;
